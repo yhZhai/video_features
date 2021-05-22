@@ -14,13 +14,14 @@ def main(path, output='video_path.txt', subset='training',
     file_names = os.listdir(path)
     with open(output, 'w') as f:
         for file_name in tqdm(file_names):
-            video_name = file_name[2:-4]
-            if search_valid_video:
-                if video_name in json_file.keys():
-                    if json_file[video_name]['subset'] == subset:
-                        f.write('{}\n'.format(os.path.join(path, file_name)))
-            else:
-                f.write('{}\n'.format(os.path.join(path, file_name)))
+            if file_name[-3:] in ['mp4']:
+                if search_valid_video:
+                    video_name = file_name[2:-4]
+                    if video_name in json_file.keys():
+                        if json_file[video_name]['subset'] == subset:
+                            f.write('{}\n'.format(os.path.join(path, file_name)))
+                else:
+                    f.write('{}\n'.format(os.path.join(path, file_name)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
