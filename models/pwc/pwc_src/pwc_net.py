@@ -18,7 +18,7 @@ torch.manual_seed(0)
 numpy.random.seed(0)
 #
 
-assert(int(str('').join(torch.__version__.split('.')[0:3])) >= 41) # requires at least pytorch version 0.4.1
+# assert(int(str('').join(torch.__version__.split('.')[0:3])) >= 41) # requires at least pytorch version 0.4.1
 
 def Backward(tensorInput, tensorFlow, device):
 
