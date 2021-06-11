@@ -3,26 +3,20 @@ import json
 import argparse
 from tqdm import tqdm
 
-def main(path, subset='training', output='video_path.txt', json_path='hacs.json'):
-
-    with open(json_path, 'r') as f:
-        json_file = json.load(f)
-        json_file = json_file['database']
-        
+def main(path, output='video_path.txt', num_split=1):
+    outputs = [open(output.replace('.', f'_{i}.'), 'w') for i in range(num_split)]
     file_names = os.listdir(path)
-    with open(output, 'w') as f:
-        for file_name in tqdm(file_names):
-            video_name = file_name[2:-4]
-            if video_name in json_file.keys():
-                if json_file[video_name]['subset'] == subset:
-                    f.write('{}\n'.format(os.path.join(path, file_name)))
+    for i, file_name in tqdm(enumerate(file_names)):
+        outputs[int(i % num_split)].write('{}\n'.format(os.path.join(path, file_name)))
+
+    for f in outputs:
+        f.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path', type=str)
-    parser.add_argument('--subset', type=str)
-    parser.add_argument('--output_path', type=str)
-    parser.add_argument('--json_file', type=str)
+    parser.add_argument('-p', '--path', type=str)
+    parser.add_argument('-o','--output_path', type=str)
+    parser.add_argument('-n','--num_split', type=int, default=1)
     opt = parser.parse_args()
-    main(opt.path, opt.subset, opt.output_path, opt.json_file)
+    main(opt.path, opt.output_path, opt.num_split)
 
